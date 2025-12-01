@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import API from "./api/api";
+import { getMe } from "./api/api";
 
-export default function RoleProtectedRoute({ children, role }) {
+export default function TeacherProtectedRoute({ children }) {
   const [loading, setLoading] = useState(true);
   const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
-    const check = async () => {
+    async function check() {
       try {
-        const res = await API.get("/auth/me");  // backend verifies cookie
-        if (res.data.role === role) setAllowed(true);
+        const res = await getMe();
+        if (res.data.role === "teacher") setAllowed(true);
       } catch (err) {
         setAllowed(false);
       }
       setLoading(false);
-    };
+    }
 
     check();
   }, []);

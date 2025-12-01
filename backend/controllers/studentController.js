@@ -28,20 +28,21 @@ export const getMyResults = async (req, res) => {
   try {
     const studentId = req.user.id;
 
-    // Get all results of the student
     const results = await Result.find({ studentId })
+      .populate("studentId", "name rollNo department email") // ✅ ADD THIS
       .populate({
         path: "examId",
-        select: "title date isPublished",
-        match: { isPublished: true }, // ✅ Filter published exams only
+        select: "title date isPublished subject",
+        match: { isPublished: true }
       })
       .populate("teacherId", "name subject")
       .sort({ createdAt: -1 });
 
-    // Filter out results where examId is null (unpublished)
-    const publishedResults = results.filter((r) => r.examId !== null);
+    // Remove results of unpublished exams
+    const publishedResults = results.filter(r => r.examId !== null);
 
     res.json(publishedResults);
+
   } catch (err) {
     console.error("❌ Error fetching student results:", err);
     res.status(500).json({ message: err.message });

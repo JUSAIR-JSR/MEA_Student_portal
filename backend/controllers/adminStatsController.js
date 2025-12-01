@@ -88,3 +88,143 @@ export const getSubjectAverages = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+//let start new features  
+
+export const getDepartmentPerformance = async (req, res) => {
+  try {
+    const result = await Result.aggregate([
+      {
+        $lookup: {
+          from: "students",
+          localField: "studentId",
+          foreignField: "_id",
+          as: "student",
+        },
+      },
+      { $unwind: "$student" },
+      {
+        $group: {
+          _id: "$student.department",
+          averageMarks: { $avg: "$marks" },
+          students: { $addToSet: "$studentId" },
+        },
+      },
+      {
+        $project: {
+          department: "$_id",
+          averageMarks: { $round: ["$averageMarks", 2] },
+          students: { $size: "$students" },
+          _id: 0,
+        },
+      },
+      { $sort: { averageMarks: -1 } }
+    ]);
+
+    res.json(result);
+  } catch (err) {
+    console.error("Error getDepartmentPerformance:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getTopPerformers = async (req, res) => {
+  try {
+    const result = await Result.aggregate([
+      {
+        $group: {
+          _id: "$studentId",
+          averageMarks: { $avg: "$marks" },
+        },
+      },
+      {
+        $lookup: {
+          from: "students",
+          localField: "_id",
+          foreignField: "_id",
+          as: "student"
+        }
+      },
+      { $unwind: "$student" },
+      {
+        $project: {
+          _id: 1,
+          name: "$student.name",
+          rollNo: "$student.rollNo",
+          department: "$student.department",
+          averageMarks: { $round: ["$averageMarks", 2] }
+        }
+      },
+      { $sort: { averageMarks: -1 } },
+      { $limit: 10 }
+    ]);
+
+    res.json(result);
+  } catch (err) {
+    console.error("Error getTopPerformers:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getMonthlyTrends = async (req, res) => {
+  try {
+    const result = await Result.aggregate([
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          averageMarks: { $avg: "$marks" },
+          exams: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          month: "$_id",
+          averageMarks: { $round: ["$averageMarks", 2] },
+          exams: 1,
+          _id: 0
+        }
+      },
+      { $sort: { month: 1 } }
+    ]);
+
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+    const formatted = result.map(r => ({
+      month: monthNames[r.month - 1],
+      averageMarks: r.averageMarks,
+      exams: r.exams
+    }));
+
+    res.json(formatted);
+  } catch (err) {
+    console.error("Error getMonthlyTrends:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getRecentActivity = async (req, res) => {
+  try {
+    const exams = await Exam.find().sort({ createdAt: -1 }).limit(5);
+    const results = await Result.find().sort({ createdAt: -1 }).limit(5);
+
+    const formatted = [
+      ...exams.map(e => ({
+        type: "Exam",
+        description: `New exam created: ${e.title}`,
+        timestamp: e.createdAt
+      })),
+      ...results.map(r => ({
+        type: "Result",
+        description: `Result published for ${r.subject}`,
+        timestamp: r.createdAt
+      }))
+    ]
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    .slice(0, 5);
+
+    res.json(formatted);
+  } catch (err) {
+    console.error("Error getRecentActivity:", err);
+    res.status(500).json({ message: err.message });
+  }
+};

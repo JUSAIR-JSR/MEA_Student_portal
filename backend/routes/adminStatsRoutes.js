@@ -1,7 +1,10 @@
 // backend/routes/adminStatsRoutes.js
 import express from "express";
 import protect from "../middleware/authMiddleware.js";
-import { getOverview, getPassFail, getSubjectAverages } from "../controllers/adminStatsController.js";
+import { getOverview, getPassFail, getSubjectAverages,  getDepartmentPerformance,
+  getTopPerformers,
+  getMonthlyTrends,
+  getRecentActivity } from "../controllers/adminStatsController.js";
 
 const router = express.Router();
 
@@ -9,5 +12,12 @@ const router = express.Router();
 router.get("/overview", protect, getOverview);
 router.get("/passfail", protect, getPassFail);
 router.get("/subject-average", protect, getSubjectAverages);
+
+router.get("/department-performance", protect, getDepartmentPerformance);
+router.get("/top-performers", protect, getTopPerformers);
+router.get("/monthly-trends", protect, getMonthlyTrends);
+router.get("/recent-activity", protect, getRecentActivity);
+
+
 
 export default router;

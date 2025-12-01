@@ -3,25 +3,70 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import TeacherManager from "./pages/TeacherManager";
 import StudentManager from "./pages/StudentManager";
-import AllResults from "./pages/AllResults"; 
+import AllResults from "./pages/AllResults";
 import AdminNotifications from "./pages/AdminNotifications";
-import AdminAnalytics from "./pages/AdminAnalytics"; // ⭐ Add this
+import AdminAnalytics from "./pages/AdminAnalytics";
+import AdminProtectedRoute from "./AdminProtectedRoute";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        
-        {/* Public Route */}
         <Route path="/" element={<Login />} />
 
-        {/* Admin Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/teachers" element={<TeacherManager />} />
-        <Route path="/students" element={<StudentManager />} />
-        <Route path="/all-results" element={<AllResults />} />
-        <Route path="/notifications" element={<AdminNotifications />} />
-        <Route path="/analytics" element={<AdminAnalytics />} /> {/* ⭐ NEW */}
+        <Route
+          path="/dashboard"
+          element={
+            <AdminProtectedRoute>
+              <Dashboard />
+            </AdminProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/teachers"
+          element={
+            <AdminProtectedRoute>
+              <TeacherManager />
+            </AdminProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/students"
+          element={
+            <AdminProtectedRoute>
+              <StudentManager />
+            </AdminProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/all-results"
+          element={
+            <AdminProtectedRoute>
+              <AllResults />
+            </AdminProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/notifications"
+          element={
+            <AdminProtectedRoute>
+              <AdminNotifications />
+            </AdminProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/analytics"
+          element={
+            <AdminProtectedRoute>
+              <AdminAnalytics />
+            </AdminProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

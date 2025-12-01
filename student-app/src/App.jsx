@@ -5,6 +5,7 @@ import StudentResults from "./pages/StudentResults";
 import Navbar from "./components/Navbar";
 import StudentProfile from "./pages/StudentProfile";
 import RoleProtectedRoute from "./RoleProtectedRoute";
+import StudentNotifications from "./pages/StudentNotifications";
 
 
 
@@ -52,6 +53,16 @@ function Layout() {
             </RoleProtectedRoute>
           }
         />
+
+        <Route
+  path="/student-notifications"
+  element={
+    <RoleProtectedRoute role="student">
+      <StudentNotifications />
+    </RoleProtectedRoute>
+  }
+/>
+
       </Routes>
     </>
   );

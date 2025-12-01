@@ -1,11 +1,13 @@
+// backend/routes/authRoutes.js
 import express from "express";
-import { registerAdmin, login,googleAuth  } from "../controllers/authController.js";
+import { login, getMe, logout, googleAuth } from "../controllers/authController.js";
+import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/register-admin", registerAdmin);
 router.post("/login", login);
-// Google OAuth exchange endpoint (frontend sends Google idToken here)
+router.get("/me", protect, getMe);
+router.post("/logout", logout);
 router.post("/google", googleAuth);
 
 export default router;

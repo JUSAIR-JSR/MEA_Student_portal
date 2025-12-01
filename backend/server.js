@@ -1,6 +1,8 @@
+// server.js (or app.js)
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
@@ -11,13 +13,34 @@ import resultRoutes from "./routes/resultRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import adminStatsRoutes from "./routes/adminStatsRoutes.js";
 
-
 dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow requests with no origin (like mobile apps, curl)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -28,9 +51,6 @@ app.use("/api/student", studentRoutes);
 app.use("/api/result", resultRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin/stats", adminStatsRoutes);
-
-
-
 
 app.get("/", (req, res) => {
   res.send("Backend API running successfully ✅");
