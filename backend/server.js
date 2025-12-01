@@ -19,10 +19,17 @@ connectDB();
 const app = express();
 
 const allowedOrigins = [
-  "https://middleeastacademystudent.onrender.com",
-  "https://middleeastacademyteacher.onrender.com",
+  // Local development
+  // "http://localhost:5173",
+  // "http://localhost:5174",
+  // "http://localhost:5175",
+
+  // Hosted frontend apps
   "https://middleeastacademyadmin.onrender.com",
+  "https://middleeastacademyteacher.onrender.com",
+  "https://middleeastacademystudent.onrender.com",
 ];
+
 
 app.use(
   cors({
