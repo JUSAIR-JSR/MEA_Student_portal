@@ -60,8 +60,15 @@ export const login = async (req, res) => {
     res
       .cookie("authToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+
+        //for local use
+        // secure: process.env.NODE_ENV === "production",
+        // sameSite: "lax",
+
+        //for deployment in render
+        secure: true,
+        sameSite: "none",
+
         path: "/",
         maxAge: 24 * 60 * 60 * 1000,
       })
@@ -103,8 +110,15 @@ export const logout = (req, res) => {
   res.clearCookie("authToken", {
     path: "/",
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    //its for local developement
+    // secure: process.env.NODE_ENV === "production",
+    // sameSite: "lax",
+    secure: true,
+    sameSite: "none",
+
+    //its for deploy  in render
+
+
   });
 
   res.json({ message: "Logged out" });
