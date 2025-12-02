@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API = axios.create({
   // baseURL: "http://localhost:5000/api",
-  baseURL: "https://middleeastacademyserver.onrender.com/api",
+  baseURL: "https://api.middleeastacademy.in/api",
   withCredentials: true,   // REQUIRED for cookies
 });
 

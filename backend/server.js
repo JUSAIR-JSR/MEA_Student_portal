@@ -25,9 +25,10 @@ const allowedOrigins = [
   // "http://localhost:5175",
 
   // Hosted frontend apps
-  "https://middleeastacademyadmin.onrender.com",
-  "https://middleeastacademyteacher.onrender.com",
-  "https://middleeastacademystudent.onrender.com",
+  "https://admin.middleeastacademy.in",
+  "https://teacher.middleeastacademy.in",
+  "https://student.middleeastacademy.in",
+
 ];
 
 
