@@ -25,6 +25,7 @@ const allowedOrigins = [
   "http://localhost:3000",
 ];
 
+// allow ALL Vercel deployments for student + teacher + admin
 const vercelPattern = /^https:\/\/.*\.vercel\.app$/;
 
 app.use(
@@ -32,20 +33,25 @@ app.use(
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
 
-      const isAllowed =
+      const allowed =
         allowedOrigins.includes(origin) ||
         vercelPattern.test(origin);
 
-      if (!isAllowed) {
-        console.log("❌ Blocked Origin:", origin);
-        return callback(new Error("Not allowed by CORS"), false);
+      if (!allowed) {
+        console.log("❌ BLOCKED ORIGIN:", origin);
+        return callback(new Error("CORS blocked"), false);
       }
 
+      console.log("✅ ALLOWED ORIGIN:", origin);
       return callback(null, true);
     },
     credentials: true,
   })
 );
+app.use((req, res, next) => {
+  console.log("Origin:", req.headers.origin);
+  next();
+});
 
 
 
