@@ -25,21 +25,16 @@ const allowedOrigins = [
   "http://localhost:3000",
 ];
 
-// Allow Vercel preview URLs for student & teacher
-const vercelPatterns = [
-  /^https:\/\/.*student.*\.vercel\.app$/,
-  /^https:\/\/.*teacher.*\.vercel\.app$/,
-];
+const vercelPattern = /^https:\/\/.*\.vercel\.app$/;
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // SSR or mobile apps
       if (!origin) return callback(null, true);
 
       const isAllowed =
         allowedOrigins.includes(origin) ||
-        vercelPatterns.some((pattern) => pattern.test(origin));
+        vercelPattern.test(origin);
 
       if (!isAllowed) {
         console.log("❌ Blocked Origin:", origin);
@@ -51,6 +46,7 @@ app.use(
     credentials: true,
   })
 );
+
 
 
 app.use(express.json());
