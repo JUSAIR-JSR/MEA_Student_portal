@@ -19,34 +19,39 @@ connectDB();
 const app = express();
 
 const allowedOrigins = [
-  // Local development
-  // "http://localhost:5173",
-  // "http://localhost:5174",
-  // "http://localhost:5175",
-  // "http://localhost:3000",
-
-  // Hosted frontend apps
   "https://admin.middleeastacademy.in",
   "https://teacher.middleeastacademy.in",
   "https://student.middleeastacademy.in",
-
+  "http://localhost:3000",
 ];
 
+// Allow Vercel preview URLs for student & teacher
+const vercelPatterns = [
+  /^https:\/\/.*student.*\.vercel\.app$/,
+  /^https:\/\/.*teacher.*\.vercel\.app$/,
+];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow requests with no origin (like mobile apps, curl)
+      // SSR or mobile apps
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
-        return callback(new Error(msg), false);
+
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        vercelPatterns.some((pattern) => pattern.test(origin));
+
+      if (!isAllowed) {
+        console.log("❌ Blocked Origin:", origin);
+        return callback(new Error("Not allowed by CORS"), false);
       }
+
       return callback(null, true);
     },
     credentials: true,
   })
 );
+
 
 app.use(express.json());
 app.use(cookieParser());
