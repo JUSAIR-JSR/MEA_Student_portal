@@ -19,27 +19,33 @@ connectDB();
 const app = express();
 
 const allowedOrigins = [
-  "https://admin.middleeastacademy.in", // your Vite admin
+  "https://admin.middleeastacademy.in",
+  "https://teacher.middleeastacademy.in",
+  "https://student.middleeastacademy.in",
 ];
 
-const vercelOrigins = /^https:\/\/.*vercel\.app$/;
+const vercelPattern = /^https:\/\/.*\.vercel\.app$/;
 
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin) || vercelOrigins.test(origin)) {
-        console.log("✅ ALLOWED:", origin);
+      const isAllowed =
+        allowedOrigins.includes(origin) || vercelPattern.test(origin);
+
+      if (isAllowed) {
+        console.log("✅ ALLOWED ORIGIN:", origin);
         return callback(null, true);
       }
 
-      console.log("❌ BLOCKED:", origin);
+      console.log("❌ BLOCKED ORIGIN:", origin);
       return callback(new Error("CORS blocked"), false);
     },
     credentials: true,
   })
 );
+
 
 
 app.use(express.json());
