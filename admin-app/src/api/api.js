@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  // baseURL: "http://localhost:5000/api",
-  baseURL: "https://api.middleeastacademy.in/api",
+  baseURL: "http://localhost:5000/api",
+  // baseURL: "https://api.middleeastacademy.in/api",
   withCredentials: true, // 🔥 Send HttpOnly cookies in every request
 });
 

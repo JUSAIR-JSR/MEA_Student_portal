@@ -20,14 +20,15 @@ const app = express();
 
 const allowedOrigins = [
   // Local development
-  // "http://localhost:5173",
-  // "http://localhost:5174",
-  // "http://localhost:5175",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "http://localhost:3000",
 
   // Hosted frontend apps
-  "https://admin.middleeastacademy.in",
-  "https://teacher.middleeastacademy.in",
-  "https://student.middleeastacademy.in",
+  // "https://admin.middleeastacademy.in",
+  // "https://teacher.middleeastacademy.in",
+  // "https://student.middleeastacademy.in",
 
 ];
 
