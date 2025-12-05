@@ -119,11 +119,11 @@ export default function DashboardPage() {
                         <User className="w-8 h-8 text-blue-600" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-slate-800">{result?.studentId?.name}</h3>
+                        <h3 className="text-xl font-bold text-slate-800">{result?.studentId?.name || "Student"}</h3>
                         <div className="flex items-center gap-4 text-slate-600 mt-1">
                           <span className="flex items-center gap-2">
                             <span className="text-sm">Roll No:</span>
-                            <span className="font-semibold">{result.studentId?.rollNo}</span>
+                            <span className="font-semibold">{result?.studentId?.rollNo || "-"}</span>
                           </span>
                         </div>
                       </div>
@@ -139,7 +139,7 @@ export default function DashboardPage() {
                         </div>
                         <div>
                           <p className="text-sm text-slate-500">Exam</p>
-                          <p className="font-semibold text-slate-800">{result.examId?.title}</p>
+                          <p className="font-semibold text-slate-800">{result?.examId?.title || "N/A"}</p>
                         </div>
                       </div>
                     </div>
@@ -151,7 +151,7 @@ export default function DashboardPage() {
                         </div>
                         <div>
                           <p className="text-sm text-slate-500">Subject</p>
-                          <p className="font-semibold text-slate-800">{result.subject}</p>
+                          <p className="font-semibold text-slate-800">{result?.subject || "N/A"}</p>
                         </div>
                       </div>
                     </div>
@@ -162,7 +162,7 @@ export default function DashboardPage() {
                     <div className="bg-[linear-gradient(to_bottom_right,#eff6ff,#ffffff)] p-5 rounded-xl border border-blue-100">
                       <p className="text-sm text-slate-600 mb-2">Marks Obtained</p>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-3xl font-bold text-blue-600">{result.marks}</span>
+                        <span className="text-3xl font-bold text-blue-600">{result?.marks ?? "-"}</span>
                         <span className="text-slate-500">points</span>
                       </div>
                     </div>
@@ -170,7 +170,7 @@ export default function DashboardPage() {
                     <div className="bg-[linear-gradient(to_bottom_right,#ecfdf5,#ffffff)] p-5 rounded-xl border border-emerald-100">
                       <p className="text-sm text-slate-600 mb-2">Grade</p>
                       <div className="flex items-center gap-3">
-                        <span className="text-3xl font-bold text-emerald-600">{result.grade}</span>
+                        <span className="text-3xl font-bold text-emerald-600">{result?.grade || "-"}</span>
                         {(result.grade === "A+" || result.grade === "A") && (
                           <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
                         )}
@@ -183,11 +183,10 @@ export default function DashboardPage() {
                         <p className="text-sm text-slate-600">Date</p>
                       </div>
                       <p className="text-lg font-semibold text-slate-800">
-                        {new Date(result.createdAt).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}
+                      {result?.createdAt
+                      ? new Date(result.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+                      : "N/A"
+                      }
                       </p>
                     </div>
                   </div>

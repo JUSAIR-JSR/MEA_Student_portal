@@ -4,13 +4,21 @@ export function middleware(req) {
   const token = req.cookies.get("authToken")?.value;
   const path = req.nextUrl.pathname;
 
-  // Public page
-  const publicPaths = ["/login"];
+  const publicPages = ["/login"];
 
-  if (!token && !publicPaths.includes(path)) {
+  const protectedPages = [
+    "/dashboard",
+    "/profile",
+    "/results",
+    "/notifications",
+  ];
+
+  // If user tries to access protected page without login → redirect
+  if (protectedPages.some(p => path.startsWith(p)) && !token) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
+  // If already logged in → block going to login page
   if (token && path === "/login") {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
