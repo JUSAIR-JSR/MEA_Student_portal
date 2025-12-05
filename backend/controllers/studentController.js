@@ -39,8 +39,8 @@ export const getMyResults = async (req, res) => {
       .sort({ createdAt: -1 });
 
     // Remove results of unpublished exams
-    const publishedResults = results.filter(r => r.examId !== null);
-
+      const publishedResults = results.filter(
+        r => r.examId !== null && r.studentId !== null);
     res.json(publishedResults);
 
   } catch (err) {

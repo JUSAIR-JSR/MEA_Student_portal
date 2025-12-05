@@ -27,6 +27,6 @@ export const getStudentResults = () => API.get("/student/my-results");
 
 // ---------- ⭐ FIXED EXPORT (VERCEL BUILD ERROR) ----------
 export const getStudentNotifications = () =>
-  API.get("/notifications/published/all");
+  API.get("/student/notifications");
 
 export default API;

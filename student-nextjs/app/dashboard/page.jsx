@@ -119,7 +119,7 @@ export default function DashboardPage() {
                         <User className="w-8 h-8 text-blue-600" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-slate-800">{result?.studentId?.name || "Student"}</h3>
+                        <h3 className="text-xl font-bold text-slate-800">{result?.studentId?.name ?? "Unknown Student"}</h3>
                         <div className="flex items-center gap-4 text-slate-600 mt-1">
                           <span className="flex items-center gap-2">
                             <span className="text-sm">Roll No:</span>
