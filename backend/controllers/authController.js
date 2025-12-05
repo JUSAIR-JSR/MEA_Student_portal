@@ -10,6 +10,9 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // LOGIN (auto detects admin / teacher / student)
 export const login = async (req, res) => {
+  
+    console.log("LOGIN request body:", req.body, "Origin:", req.headers.origin);
+
   try {
     const { email, rollNo, password } = req.body;
     let user = null;
@@ -68,7 +71,7 @@ export const login = async (req, res) => {
         //for deployment in render
         secure: true,
         sameSite: "none",
-
+        domain: ".middleeastacademy.in", // ← IMPORTANT: allow cookie across subdomains
         path: "/",
         maxAge: 24 * 60 * 60 * 1000,
       })
@@ -113,12 +116,11 @@ export const logout = (req, res) => {
     //its for local developement
     // secure: process.env.NODE_ENV === "production",
     // sameSite: "lax",
+    
+    //its for deploy  in render
     secure: true,
     sameSite: "none",
-
-    //its for deploy  in render
-
-
+    domain: ".middleeastacademy.in",
   });
 
   res.json({ message: "Logged out" });
@@ -174,6 +176,7 @@ export const googleAuth = async (req, res) => {
         //its for production ready site in render
         secure: true,
         sameSite: "none",
+        domain: ".middleeastacademy.in",
         path: "/",
         maxAge: 24 * 60 * 60 * 1000,
       })

@@ -18,33 +18,33 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = [
-  "https://admin.middleeastacademy.in",
-  "https://teacher.middleeastacademy.in",
-  "https://student.middleeastacademy.in",
-];
 
-const vercelPattern = /^https:\/\/.*\.vercel\.app$/;
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // allow non-browser requests
+    const allowedOrigins = [
+      "https://admin.middleeastacademy.in",
+      "https://teacher.middleeastacademy.in",
+      "https://student.middleeastacademy.in",
+      "http://localhost:3000",
+    ];
+    const vercelPattern = /^https:\/\/.*\.vercel\.app$/;
+    const isAllowed = allowedOrigins.includes(origin) || vercelPattern.test(origin);
+    if (isAllowed) {
+      console.log("✅ ALLOWED ORIGIN:", origin);
+      return callback(null, true);
+    }
+    console.log("❌ BLOCKED ORIGIN:", origin);
+    return callback(new Error("CORS blocked"), false);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept", "X-Requested-With"],
+};
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // <-- respond to preflight for all routes
 
-      const isAllowed =
-        allowedOrigins.includes(origin) || vercelPattern.test(origin);
-
-      if (isAllowed) {
-        console.log("✅ ALLOWED ORIGIN:", origin);
-        return callback(null, true);
-      }
-
-      console.log("❌ BLOCKED ORIGIN:", origin);
-      return callback(new Error("CORS blocked"), false);
-    },
-    credentials: true,
-  })
-);
 
 
 
