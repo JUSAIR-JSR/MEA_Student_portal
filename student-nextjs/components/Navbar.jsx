@@ -26,16 +26,16 @@ export default function Navbar() {
   useEffect(() => {
     API.get("/auth/me")
       .then((res) => {
-        // 🔥 FIX: use res.data.user instead of res.data
-        setProfile(res.data.user); 
+        // 🔥 FIXED: Use res.data.user
+        setProfile(res.data.user);
       })
       .catch(() => {});
-      
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
-    window.addEventListener("scroll", handleScroll);
 
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -61,7 +61,7 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            
+
             {/* Logo */}
             <div
               className="flex items-center gap-3 cursor-pointer group"
@@ -103,7 +103,7 @@ export default function Navbar() {
                 active={pathname === "/profile"}
               />
 
-              {/* 🔥 FIX: profile.rollNo → profile?.rollNo */}
+              {/* FIXED: profile?.rollNo */}
               {profile?.rollNo && (
                 <div className="ml-4 px-4 py-2 bg-[linear-gradient(to_bottom_right,#eff6ff,#eef2ff)] text-blue-700 rounded-lg font-semibold border border-blue-200 flex items-center gap-2">
                   <User className="w-4 h-4" />
@@ -130,7 +130,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* MOBILE MENU */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-slate-200 animate-slideDown">
             <div className="px-4 py-3 space-y-1">
