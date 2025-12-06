@@ -12,7 +12,6 @@ import {
   Menu,
   X,
   GraduationCap,
-  ChevronDown,
 } from "lucide-react";
 
 export default function Navbar() {
@@ -26,19 +25,18 @@ export default function Navbar() {
 
   useEffect(() => {
     API.get("/auth/me")
-      .then((res) => setProfile(res.data))
+      .then((res) => {
+        // 🔥 IMPORTANT FIX: Store only user object
+        setProfile(res.data.user);
+      })
       .catch(() => {});
-
-    // Handle scroll effect
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
+    
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    // Close mobile menu when route changes
     setMobileMenuOpen(false);
   }, [pathname]);
 
@@ -60,7 +58,8 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo/Brand */}
+
+            {/* LOGO */}
             <div
               className="flex items-center gap-3 cursor-pointer group"
               onClick={() => router.push("/dashboard")}
@@ -74,7 +73,7 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* Desktop Navigation */}
+            {/* DESKTOP NAV */}
             <div className="hidden md:flex items-center gap-1">
               <NavButton
                 icon={<Home className="w-4 h-4" />}
@@ -101,7 +100,7 @@ export default function Navbar() {
                 active={pathname === "/profile"}
               />
 
-              {/* Profile Badge */}
+              {/* PROFILE BADGE */}
               {profile?.rollNo && (
                 <div className="ml-4 px-4 py-2 bg-[linear-gradient(to_bottom_right,#eff6ff,#eef2ff)] text-blue-700 rounded-lg font-semibold border border-blue-200 flex items-center gap-2">
                   <User className="w-4 h-4" />
@@ -109,7 +108,6 @@ export default function Navbar() {
                 </div>
               )}
 
-              {/* Logout Button */}
               <button
                 onClick={handleLogout}
                 className="ml-4 flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors group"
@@ -119,7 +117,7 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Mobile menu button */}
+            {/* MOBILE MENU BUTTON */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
@@ -129,7 +127,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* MOBILE MENU */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-slate-200 animate-slideDown">
             <div className="px-4 py-3 space-y-1">
@@ -158,7 +156,6 @@ export default function Navbar() {
                 active={pathname === "/profile"}
               />
 
-              {/* Profile in mobile */}
               {profile?.rollNo && (
                 <div className="px-4 py-3 bg-slate-50 rounded-lg border border-slate-200">
                   <div className="flex items-center gap-3">
@@ -173,7 +170,6 @@ export default function Navbar() {
                 </div>
               )}
 
-              {/* Logout in mobile */}
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-red-100"
@@ -186,29 +182,13 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* Spacer to prevent content from going under fixed navbar */}
       <div className="h-16"></div>
-
-      <style jsx>{`
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-slideDown {
-          animation: slideDown 0.3s ease-out;
-        }
-      `}</style>
     </>
   );
 }
 
-// Desktop Navigation Button Component
+/* -------- NAV BUTTON COMPONENTS (UNCHANGED STYLE) -------- */
+
 function NavButton({ icon, label, onClick, active }) {
   return (
     <button
@@ -225,7 +205,6 @@ function NavButton({ icon, label, onClick, active }) {
   );
 }
 
-// Mobile Navigation Item Component
 function MobileNavItem({ icon, label, onClick, active }) {
   return (
     <button
