@@ -1,6 +1,15 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  /* config options here */
-};
+// eslint.config.mjs
+import { defineConfig } from "eslint";
+import next from "eslint-config-next";
 
-export default nextConfig;
+export default defineConfig({
+  extends: [
+    ...next(),
+  ],
+  ignorePatterns: [
+    ".next/**",
+    "node_modules/**",
+    "build/**",
+    "out/**",
+  ],
+});
