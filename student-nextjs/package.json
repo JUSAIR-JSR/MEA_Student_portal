@@ -13,14 +13,14 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.4",
     "lucide-react": "^0.555.0",
-    "next": "15.1.7", 
+    "next": "15.1.7",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },
   "devDependencies": {
-    "eslint": "8.57.0",
-    "eslint-config-next": "15.1.7",
     "@tailwindcss/postcss": "^4",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^15.1.7",
     "tailwindcss": "^4"
   }
 }
