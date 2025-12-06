@@ -26,13 +26,16 @@ export default function Navbar() {
   useEffect(() => {
     API.get("/auth/me")
       .then((res) => {
-        // 🔥 IMPORTANT FIX: Store only user object
-        setProfile(res.data.user);
+        // 🔥 FIX: use res.data.user instead of res.data
+        setProfile(res.data.user); 
       })
       .catch(() => {});
-    
-    const handleScroll = () => setScrolled(window.scrollY > 10);
+      
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -58,8 +61,8 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-
-            {/* LOGO */}
+            
+            {/* Logo */}
             <div
               className="flex items-center gap-3 cursor-pointer group"
               onClick={() => router.push("/dashboard")}
@@ -73,7 +76,7 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* DESKTOP NAV */}
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-1">
               <NavButton
                 icon={<Home className="w-4 h-4" />}
@@ -100,7 +103,7 @@ export default function Navbar() {
                 active={pathname === "/profile"}
               />
 
-              {/* PROFILE BADGE */}
+              {/* 🔥 FIX: profile.rollNo → profile?.rollNo */}
               {profile?.rollNo && (
                 <div className="ml-4 px-4 py-2 bg-[linear-gradient(to_bottom_right,#eff6ff,#eef2ff)] text-blue-700 rounded-lg font-semibold border border-blue-200 flex items-center gap-2">
                   <User className="w-4 h-4" />
@@ -117,7 +120,7 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* MOBILE MENU BUTTON */}
+            {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
@@ -127,7 +130,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* MOBILE MENU */}
+        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-slate-200 animate-slideDown">
             <div className="px-4 py-3 space-y-1">
@@ -183,11 +186,19 @@ export default function Navbar() {
       </nav>
 
       <div className="h-16"></div>
+
+      <style jsx>{`
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slideDown {
+          animation: slideDown 0.3s ease-out;
+        }
+      `}</style>
     </>
   );
 }
-
-/* -------- NAV BUTTON COMPONENTS (UNCHANGED STYLE) -------- */
 
 function NavButton({ icon, label, onClick, active }) {
   return (
@@ -215,9 +226,7 @@ function MobileNavItem({ icon, label, onClick, active }) {
           : "text-slate-600 hover:bg-slate-50"
       }`}
     >
-      <div className={`${active ? "text-blue-600" : "text-slate-400"}`}>
-        {icon}
-      </div>
+      <div className={`${active ? "text-blue-600" : "text-slate-400"}`}>{icon}</div>
       <span className="font-medium">{label}</span>
     </button>
   );

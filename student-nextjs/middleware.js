@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  // ✅ Students, teachers, admins ALL use this cookie name
   const token = req.cookies.get("authToken")?.value;
-
   const path = req.nextUrl.pathname;
 
   const publicPages = ["/login"];
+
   const protectedPages = [
     "/dashboard",
     "/profile",
@@ -14,12 +13,12 @@ export function middleware(req) {
     "/notifications",
   ];
 
-  // ❌ If not logged in → block protected pages
-  if (protectedPages.some((p) => path.startsWith(p)) && !token) {
+  // If user tries to access protected page without login → redirect
+  if (protectedPages.some(p => path.startsWith(p)) && !token) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // ❌ If logged in → prevent login page access
+  // If already logged in → block going to login page
   if (token && path === "/login") {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
