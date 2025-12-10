@@ -1,0 +1,28 @@
+backend/
+│
+├── server.js
+├── .env
+│
+├── config/
+│   └── db.js               ← MongoDB connection setup
+│
+├── models/
+│   ├── adminModel.js
+│   ├── teacherModel.js
+│   ├── studentModel.js
+│   └── resultModel.js
+│
+├── routes/
+│   ├── authRoutes.js
+│   ├── adminRoutes.js
+│   ├── teacherRoutes.js
+│   └── studentRoutes.js
+│
+├── controllers/
+│   ├── authController.js
+│   ├── adminController.js
+│   ├── teacherController.js
+│   └── studentController.js
+│
+└── middleware/
+    └── authMiddleware.js
