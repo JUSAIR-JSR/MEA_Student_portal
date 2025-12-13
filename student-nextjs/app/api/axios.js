@@ -10,11 +10,12 @@ API.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      window.location.href = "/login";
+      window.location.replace("/login");
     }
     return Promise.reject(err);
   }
 );
+
 
 // ---------- AUTH ----------
 export const studentLogin = (data) => API.post("/auth/login", data);
