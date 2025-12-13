@@ -24,7 +24,7 @@ export default function LoginPage() {
       const button = e.target.querySelector('button[type="submit"]');
       button.classList.add('scale-95');
       setTimeout(() => {
-        router.push("/dashboard");
+        router.replace("/dashboard");
       }, 300);
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
