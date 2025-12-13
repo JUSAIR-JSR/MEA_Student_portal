@@ -1,42 +1,32 @@
 "use client";
 import { useEffect, useState } from "react";
 import API from "@/app/api/axios";
-import { useRouter } from "next/navigation";
 
 export default function PageGuard({ children }) {
-  const router = useRouter();
   const [allowed, setAllowed] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const checkAuth = async () => {
-    try {
-      const res = await API.get("/auth/me");
-      if (res.data.role === "student") {
-        setAllowed(true);
-      } else {
-        router.replace("/login");
-      }
-    } catch {
-      router.replace("/login");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    checkAuth();
+    let mounted = true;
 
-    // 🔴 CRITICAL: handles BACK button cache restore
-    const handlePageShow = (e) => {
-      if (e.persisted) {
-        setAllowed(false);
-        setLoading(true);
-        checkAuth();
+    async function check() {
+      try {
+        const res = await API.get("/auth/me");
+        if (mounted && res.data.role === "student") {
+          setAllowed(true);
+        }
+      } catch {
+        // ❌ DO NOTHING HERE
+        // middleware will handle redirect
+      } finally {
+        if (mounted) setLoading(false);
       }
-    };
+    }
 
-    window.addEventListener("pageshow", handlePageShow);
-    return () => window.removeEventListener("pageshow", handlePageShow);
+    check();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   if (loading) {

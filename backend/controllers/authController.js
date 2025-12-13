@@ -73,7 +73,7 @@ export const login = async (req, res) => {
         sameSite: "none",
         domain: ".middleeastacademy.in", // ← IMPORTANT: allow cookie across subdomains
         path: "/",
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
       })
       .json({
         message: `${role} logged in`,
