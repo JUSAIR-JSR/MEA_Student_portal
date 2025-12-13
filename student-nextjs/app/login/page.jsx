@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { studentLogin } from "@/app/api/axios";
+import API from "@/app/api/axios";
 import { Loader2, LogIn, User, Lock, Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
@@ -12,6 +13,17 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
+
+  // ✅ Redirect logged-in users away from login
+  useEffect(() => {
+    API.get("/auth/me")
+      .then(() => {
+        router.replace("/dashboard");
+      })
+      .catch(() => {
+        // not logged in → stay on login
+      });
+  }, [router]);
 
   async function handleLogin(e) {
     e.preventDefault();
